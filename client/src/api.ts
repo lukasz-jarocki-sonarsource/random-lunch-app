@@ -16,7 +16,7 @@ export async function cancel() {
 
 const RETRIES = 3;
 
-export async function getMatches() {
+export async function getMatches(): Promise<{ name: string }> {
   let i = 0;
 
   while (i < RETRIES) {
