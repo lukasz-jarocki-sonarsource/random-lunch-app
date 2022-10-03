@@ -31,7 +31,7 @@ public class UserService {
   }
 
   public void create(String name) {
-    jdbcTemplate.execute("INSERT INTO USERS(name) VALUES (" + name + ")");
+    jdbcTemplate.execute("INSERT INTO USERS(name) VALUES ('" + name + "');");
   }
 
   public Collection<User> findAll() {
