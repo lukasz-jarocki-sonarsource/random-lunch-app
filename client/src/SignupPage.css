@@ -1,0 +1,14 @@
+#signup-page {
+  min-width: 300px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.signup-form button {
+  align-self: center;
+}
