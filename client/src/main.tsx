@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import ErrorPage from "./ErrorPage";
 import "./index.css";
+import MatchPage from "./MatchPage";
 import Redirects from "./Redirects";
 import SignupPage from "./SignupPage";
 import WaitPage from "./WaitPage";
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "wait",
         element: <WaitPage />,
+      },
+      {
+        path: "match",
+        element: <MatchPage />,
       },
     ],
   },
