@@ -2,3 +2,90 @@ body {
   padding: 12px;
   background-color: azure;
 }
+
+.card {
+  display: block;
+  border: 1px solid;
+  border-radius: 6px;
+  background-color: white;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+  font-size: larger;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: large;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.margin-s {
+  margin: 4px;
+}
+.margin-m {
+  margin: 8px;
+}
+.margin-l {
+  margin: 16px;
+}
+.margin-xl {
+  margin: 32px;
+}
+
+.margin-s-left {
+  margin-left: 4px;
+}
+.margin-s-right {
+  margin-right: 4px;
+}
+.margin-s-top {
+  margin-top: 4px;
+}
+.margin-s-bottom {
+  margin-bottom: 4px;
+}
+
+.margin-m-left {
+  margin-left: 8px;
+}
+.margin-m-right {
+  margin-right: 8px;
+}
+.margin-m-top {
+  margin-top: 8px;
+}
+.margin-m-bottom {
+  margin-bottom: 8px;
+}
+
+.margin-l-left {
+  margin-left: 16px;
+}
+.margin-l-right {
+  margin-right: 16px;
+}
+.margin-l-top {
+  margin-top: 16px;
+}
+.margin-l-bottom {
+  margin-bottom: 16px;
+}
+
+.margin-xl-left {
+  margin-left: 32px;
+}
+.margin-xl-right {
+  margin-right: 32px;
+}
+.margin-xl-top {
+  margin-top: 32px;
+}
+.margin-xl-bottom {
+  margin-bottom: 32px;
+}
