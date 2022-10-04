@@ -1,19 +1,22 @@
 import { differenceInMilliseconds, formatDistanceStrict, parse } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { cancel } from "./api";
 import Button from "./Button";
 import Error from "./Error";
 import Loading from "./Loading";
+import { Page } from "./page";
 import "./WaitPage.css";
 
 const TIME = "11:30:00";
 
-export default function WaitPage() {
+interface Props {
+  nav: (page: Page) => void;
+}
+
+export default function WaitPage({ nav }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [timer, setTimer] = useState("");
-  const nav = useNavigate();
 
   const doCancel = useCallback(async () => {
     setLoading(true);
@@ -23,7 +26,7 @@ export default function WaitPage() {
     setLoading(false);
 
     if (success) {
-      nav("/signup");
+      nav(Page.signup);
     } else {
       setError(true);
     }
@@ -41,7 +44,7 @@ export default function WaitPage() {
     const waitTime = differenceInMilliseconds(parse(TIME, "HH:mm:ss", now), now);
 
     setTimeout(() => {
-      nav("/match");
+      nav(Page.match);
     }, Math.max(0, waitTime));
   }, []);
 
