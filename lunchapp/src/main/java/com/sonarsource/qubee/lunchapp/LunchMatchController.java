@@ -35,10 +35,29 @@ public class LunchMatchController {
     this.userService = userService;
   }
 
+  @GetMapping(path = "status")
+  @ResponseBody
+  public Status getStatus() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String userName = (String) authentication.getDetails();
+    return new Status(userName, userService.getUserProfile(userName).isPresent());
+  }
+
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public String errorHandling(Exception e) {
+    logger.error("error while processing the query", e);
+    return "Something went wrong: " + e.getMessage();
+  }
+
   @PostMapping(path = "signup")
   public void registerForLunch(HttpServletRequest request, @RequestBody SignupForm signupForm) {
     final String signupName = signupForm.name();
     Assert.notNull(signupName, "name parameter must be present");
+    userService.getUserProfile(signupName).ifPresent(u -> {
+      throw new IllegalArgumentException("user " + signupName + " is already signed up");
+    });
     userService.createUserProfile(signupName);
 
     PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken("", "");
@@ -51,25 +70,12 @@ public class LunchMatchController {
     session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
   }
 
-  @ExceptionHandler(Exception.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ResponseBody
-  public String errorHandling(Exception e) {
-    logger.error("error while processing the query", e);
-    return "You are wrong somehow.";
-  }
-
-  public record SignupForm(String name) {
-  }
-
-
   @GetMapping("match")
   @ResponseBody
   public Match getMatch() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String userName = (String) authentication.getDetails();
-    // TODO handle exception 403/401
-    UserDao.UserProfile user = userService.getUserProfile(userName).orElseThrow();
+    UserDao.UserProfile user = userService.getUserProfile(userName).orElseThrow(() -> new IllegalStateException("no account for your session"));
 
     return userService.findMatch(user)
       .map(lunchGroup -> lunchGroup.getMembers()
@@ -78,6 +84,12 @@ public class LunchMatchController {
         .map(Match::new)
         .findFirst().orElseGet(() -> new Match(null)))
       .orElse(null);
+  }
+
+  public record Status(String name, boolean signedUp) {
+  }
+
+  public record SignupForm(String name) {
   }
 
   @GetMapping("cancel")
