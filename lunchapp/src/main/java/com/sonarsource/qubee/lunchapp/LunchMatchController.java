@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("lunch")
+@RequestMapping("/api/lunch")
 public class LunchMatchController {
 
   Logger logger = LoggerFactory.getLogger(LunchMatchController.class);

@@ -16,8 +16,9 @@ public class SecurityConfiguration {
   public SecurityFilterChain configure(HttpSecurity http) throws Exception {
     http.csrf().disable();
     http.authorizeRequests()
-      .antMatchers("/lunch/signup").permitAll()
-      .anyRequest().authenticated();
+      .antMatchers("/api/lunch/signup").permitAll()
+      .antMatchers("/api/**").authenticated()
+      .anyRequest().permitAll();
     return http.build();
   }
 }
