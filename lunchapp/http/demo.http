@@ -1,0 +1,23 @@
+### 1. signup 1
+// @no-cookie-jar
+POST http://localhost:8080/api/lunch/signup
+Content-Type: application/json
+
+{
+  "name": "test-man1"
+}
+
+### 2. signup 2
+// @no-cookie-jar
+POST http://localhost:8080/api/lunch/signup
+Content-Type: application/json
+
+{
+  "name": "test-man2"
+}
+
+### 4. trigger match
+POST http://localhost:8080/admin/match
+
+### 6. trigger purge
+DELETE http://localhost:8080/admin/purge
