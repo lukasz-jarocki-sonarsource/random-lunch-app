@@ -1,17 +1,20 @@
 import { FormEvent, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { signup } from "./api";
 import Button from "./Button";
 import Error from "./Error";
 import Field from "./Field";
 import Loading from "./Loading";
+import { Page } from "./page";
 import "./SignupPage.css";
 
-export default function SignupPage() {
+interface Props {
+  nav: (page: Page) => void;
+}
+
+export default function SignupPage({ nav }: Props) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const nav = useNavigate();
 
   const validateForm = useCallback(() => {
     return name.length > 0;
@@ -27,7 +30,7 @@ export default function SignupPage() {
       setLoading(false);
 
       if (success) {
-        nav("/pending");
+        nav(Page.wait);
       } else {
         setError(true);
       }

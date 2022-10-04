@@ -3,7 +3,11 @@ interface SignupData {
 }
 
 export async function signup(data: SignupData) {
-  const response = await fetch("/api/lunch/signup", { method: "POST", body: JSON.stringify(data) });
+  const response = await fetch("/api/lunch/signup", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "content-type": "application/json" },
+  });
 
   return response.status < 300;
 }
@@ -20,7 +24,7 @@ export async function getMatches(): Promise<{ name: string }> {
   let i = 0;
 
   while (i < RETRIES) {
-    const response = await fetch("/api/lunch/matches", { method: "GET" });
+    const response = await fetch("/api/lunch/match", { method: "GET" });
 
     if (response.status === 200) {
       return response.json();

@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { getMatches as getMatch } from "./api";
 import Loading from "./Loading";
+import { Page } from "./page";
 import "./WaitPage.css";
 
-export default function MatchPage() {
+interface Props {
+  nav: (page: Page) => void;
+}
+
+export default function MatchPage(props: Props) {
   const [matchName, setMatchName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
