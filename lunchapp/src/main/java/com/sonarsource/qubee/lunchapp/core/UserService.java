@@ -59,12 +59,4 @@ public class UserService {
   public void resetProfiles() {
     userDao.purgeAllUsers();
   }
-
-  /*public Duration timeUntilLunch() {
-
-  }*/
-  public enum PHASE {
-    REGISTRATION,
-    LUNCH,
-  }
 }
