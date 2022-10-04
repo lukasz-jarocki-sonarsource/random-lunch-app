@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function MatchPage(props: Props) {
-  const [matchName, setMatchName] = useState("");
+  const [match, setMatch] = useState<{ name?: string; restaurant?: string }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -18,7 +18,7 @@ export default function MatchPage(props: Props) {
       try {
         const match = await getMatch();
 
-        setMatchName(match.name);
+        setMatch(match);
       } catch (e) {
         console.log(e);
         setError(true);
@@ -44,13 +44,20 @@ export default function MatchPage(props: Props) {
         </>
       )}
 
-      {matchName ? (
+      {match.name ? (
         <>
           <h2>You've been matched for today's lunch!</h2>
 
           <p className="margin-l-top">🎉️ We've found you a match 🎉️</p>
 
-          <p>Please meet {matchName} at 12:00 by the reception</p>
+          <p className="margin-l-top">
+            Please meet <span className="underline">{match.name}</span> at <em>12:05</em> by the
+            reception.
+          </p>
+          <p className="margin-m-top">
+            You can go to <span className="underline">{match.restaurant}</span> together!
+          </p>
+          <img className="margin-xl-top" alt="Meet fun illustration" src="meet.gif" />
         </>
       ) : (
         <>
