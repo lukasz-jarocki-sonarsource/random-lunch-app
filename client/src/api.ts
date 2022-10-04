@@ -6,7 +6,7 @@ interface SignupData {
 export enum Restaurant {
   vesuvio = "Il Vesuvio",
   blando = "Le Blandonnet",
-  cafe = "Café de l'Aviation",
+  cafe = "Café de l’Aviation",
   mamasan = "Mamasan",
 }
 
