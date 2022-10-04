@@ -1,0 +1,25 @@
+// @no-cookie-jar
+POST http://localhost:8080/api/lunch/signup
+Content-Type: application/json
+
+{
+  "name": "test-man1"
+}
+
+###
+POST http://localhost:8080/api/lunch/signup
+Content-Type: application/json
+
+{
+  "name": "test-man2"
+}
+
+###
+POST http://localhost:8080/admin/match
+
+###
+GET http://localhost:8080/api/lunch/match
+
+###
+DELETE http://localhost:8080/admin/purge
+

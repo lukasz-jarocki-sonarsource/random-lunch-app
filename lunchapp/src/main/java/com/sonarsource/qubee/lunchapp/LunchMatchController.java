@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -32,7 +31,6 @@ public class LunchMatchController {
 
   private final UserService userService;
 
-  @Autowired
   public LunchMatchController(UserService userService) {
     this.userService = userService;
   }
@@ -67,7 +65,8 @@ public class LunchMatchController {
 
   @GetMapping("match")
   @ResponseBody
-  public Match getMatch(Authentication authentication) {
+  public Match getMatch() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String userName = (String) authentication.getDetails();
     // TODO handle exception 403/401
     UserDao.UserProfile user = userService.getUserProfile(userName).orElseThrow();
@@ -87,7 +86,6 @@ public class LunchMatchController {
     String userName = (String) authentication.getDetails();
     // TODO handle exception 403/401
     UserDao.UserProfile user = userService.getUserProfile(userName).orElseThrow();
-
   }
 
   private record Match(String name) {

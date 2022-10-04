@@ -32,7 +32,7 @@ public class UserDao {
   }
 
   public Optional<UserProfile> findUserProfileByName(String name) {
-    return jdbcTemplate.query("SELECT * FROM USER_PROFILE WHERE name=" + name, (RowMapper<UserProfile>) UserProfile::new)
+    return jdbcTemplate.query("SELECT * FROM USER_PROFILE WHERE name='" + name + "';", (RowMapper<UserProfile>) UserProfile::new)
       .stream().findAny();
   }
 
@@ -60,7 +60,7 @@ public class UserDao {
   @Transactional
   public void purgeAllUsers() {
     this.purgeLunchGroup();
-    jdbcTemplate.execute("TRUNCATE TABLE USER_PROFILE;");
+    jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE;TRUNCATE TABLE USER_PROFILE;SET REFERENTIAL_INTEGRITY TRUE;");
   }
 
   public record UserProfile(String name) {
