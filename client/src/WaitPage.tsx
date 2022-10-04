@@ -1,4 +1,4 @@
-import { differenceInMilliseconds, formatDistanceStrict, parse } from "date-fns";
+import { addSeconds, differenceInMilliseconds, formatDistanceStrict, parse } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import { cancel } from "./api";
 import Button from "./Button";
@@ -7,7 +7,7 @@ import Loading from "./Loading";
 import { Page } from "./page";
 import "./WaitPage.css";
 
-const TIME = "11:30:00";
+const TIME = "15:00:00";
 
 interface Props {
   nav: (page: Page) => void;
@@ -33,15 +33,17 @@ export default function WaitPage({ nav }: Props) {
   }, []);
 
   useEffect(() => {
+    const now = new Date();
+    const target = location.search ? addSeconds(now, 17) : parse(TIME, "HH:mm:ss", now);
     setInterval(() => {
-      const now = new Date();
-      setTimer(formatDistanceStrict(now, parse(TIME, "HH:mm:ss", now)));
+      setTimer(formatDistanceStrict(new Date(), target));
     }, 1000);
   }, []);
 
   useEffect(() => {
     const now = new Date();
-    const waitTime = differenceInMilliseconds(parse(TIME, "HH:mm:ss", now), now);
+    const target = location.search ? addSeconds(now, 17) : parse(TIME, "HH:mm:ss", now);
+    const waitTime = differenceInMilliseconds(target, now);
 
     setTimeout(() => {
       nav(Page.match);
@@ -56,9 +58,11 @@ export default function WaitPage({ nav }: Props) {
         We'll find you a good match a few minutes before lunchtime and let you know at that moment!
       </p>
 
-      <p className="margin-xl-top">
-        Be patient, you'll be notified in <em>{timer}</em>.
-      </p>
+      {timer && (
+        <p className="margin-xl-top">
+          Be patient, you'll be notified in <em>{timer}</em>.
+        </p>
+      )}
 
       <Error className="margin-l-top" error={error}>
         Something happened :/
