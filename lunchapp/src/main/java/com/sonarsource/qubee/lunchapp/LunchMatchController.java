@@ -2,6 +2,7 @@ package com.sonarsource.qubee.lunchapp;
 
 import com.sonarsource.qubee.lunchapp.core.UserDao;
 import com.sonarsource.qubee.lunchapp.core.UserService;
+import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -40,7 +41,8 @@ public class LunchMatchController {
   public Status getStatus() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String userName = (String) authentication.getDetails();
-    return new Status(userName, userService.getUserProfile(userName).isPresent());
+    return userService.getUserProfile(userName).map(u -> new Status(userName, true, u.restaurants()))
+      .orElseGet(() -> new Status(userName, false, null));
   }
 
   @ExceptionHandler(Exception.class)
@@ -55,10 +57,11 @@ public class LunchMatchController {
   public void registerForLunch(HttpServletRequest request, @RequestBody SignupForm signupForm) {
     final String signupName = signupForm.name();
     Assert.notNull(signupName, "name parameter must be present");
+    Assert.notEmpty(signupForm.restaurants, "at least one restaurant must be selected");
     userService.getUserProfile(signupName).ifPresent(u -> {
       throw new IllegalArgumentException("user " + signupName + " is already signed up");
     });
-    userService.createUserProfile(signupName);
+    userService.createUserProfile(signupName, signupForm.restaurants());
 
     PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken("", "");
     authentication.setDetails(signupName);
@@ -77,19 +80,13 @@ public class LunchMatchController {
     String userName = (String) authentication.getDetails();
     UserDao.UserProfile user = userService.getUserProfile(userName).orElseThrow(() -> new IllegalStateException("no account for your session"));
 
-    return userService.findMatch(user)
+    return userService.findMatched(user)
       .map(lunchGroup -> lunchGroup.getMembers()
         .filter(Objects::nonNull)
         .filter(n -> !userName.equals(n))
-        .map(Match::new)
-        .findFirst().orElseGet(() -> new Match(null)))
+        .map(n -> new Match(n, lunchGroup.restaurant()))
+        .findFirst().orElseGet(() -> new Match(null, null)))
       .orElse(null);
-  }
-
-  public record Status(String name, boolean signedUp) {
-  }
-
-  public record SignupForm(String name) {
   }
 
   @GetMapping("cancel")
@@ -98,8 +95,16 @@ public class LunchMatchController {
     String userName = (String) authentication.getDetails();
     // TODO handle exception 403/401
     UserDao.UserProfile user = userService.getUserProfile(userName).orElseThrow();
+
+    //userService.
   }
 
-  private record Match(String name) {
+  public record Status(String name, boolean signedUp, List<String> restaurants) {
+  }
+
+  public record SignupForm(String name, List<String> restaurants) {
+  }
+
+  private record Match(String name, String restaurant) {
   }
 }

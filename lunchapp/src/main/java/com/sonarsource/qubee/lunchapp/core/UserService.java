@@ -1,15 +1,11 @@
 package com.sonarsource.qubee.lunchapp.core;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.support.CronExpression;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -18,21 +14,17 @@ public class UserService {
 
   private final UserDao userDao;
 
-  private final LocalTime lunchStart;
-
-  public UserService(UserDao userDao, @Value("${match.making.cron}") String lunchCron) {
+  public UserService(UserDao userDao) {
     this.userDao = userDao;
-    LocalDateTime next = CronExpression.parse(lunchCron).next(LocalDateTime.now());
-    Assert.notNull(next, lunchCron + " does not yield any execution time");
-    this.lunchStart = next.toLocalTime();
   }
 
-  public Optional<UserDao.LunchGroup> findMatch(UserDao.UserProfile userProfile) {
+  public Optional<UserDao.LunchGroup> findMatched(UserDao.UserProfile userProfile) {
     return userDao.findForUser(userProfile.name());
   }
 
-  public void createUserProfile(String name) {
-    userDao.createUserProfile(name);
+  public void createUserProfile(String name, List<String> restaurants) {
+    Assert.notEmpty(restaurants, "can't register without restaurant");
+    userDao.createUserProfile(name, restaurants);
   }
 
   public Optional<UserDao.UserProfile> getUserProfile(String name) {
@@ -48,7 +40,7 @@ public class UserService {
     while (upIte.hasNext()) {
       UserDao.UserProfile up1 = upIte.next();
       if (upIte.hasNext()) {
-        userDao.matchUsers(up1, upIte.next());
+        userDao.matchUsers(up1, upIte.next(), up1.restaurants().get(0));
       } else {
         userDao.noMatch(up1);
       }

@@ -4,7 +4,10 @@ POST http://localhost:8080/api/lunch/signup
 Content-Type: application/json
 
 {
-  "name": "test-man1"
+  "name": "test-man1",
+  "restaurants": [
+    "Il Vesuvio"
+  ]
 }
 
 ### 2. signup 2
@@ -12,7 +15,10 @@ POST http://localhost:8080/api/lunch/signup
 Content-Type: application/json
 
 {
-  "name": "test-man2"
+  "name": "test-man2",
+  "restaurants": [
+    "Il Vesuvio"
+  ]
 }
 
 ### 3. get status
