@@ -1,5 +1,13 @@
 interface SignupData {
   name: string;
+  restaurants: string[];
+}
+
+export enum Restaurant {
+  vesuvio = "Il Vesuvio",
+  blando = "Le Blandonnet",
+  cafe = "Café de l'Aviation",
+  mamasan = "Mamasan",
 }
 
 export async function signup(data: SignupData) {

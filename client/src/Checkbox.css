@@ -1,0 +1,21 @@
+.checkbox {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
+  border: 2px solid black;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background: linear-gradient(to left, #0b98cf, #2cf8e7);
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid #2cf8e7;
+}

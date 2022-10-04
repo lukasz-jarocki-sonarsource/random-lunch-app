@@ -1,6 +1,7 @@
 import { FormEvent, useCallback, useState } from "react";
-import { signup } from "./api";
+import { Restaurant, signup } from "./api";
 import Button from "./Button";
+import Checkbox from "./Checkbox";
 import Error from "./Error";
 import Field from "./Field";
 import Loading from "./Loading";
@@ -16,6 +17,18 @@ export default function SignupPage({ nav }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const [restaurants, setRestaurants] = useState<{ [key: string]: boolean }>({
+    [Restaurant.blando]: false,
+    [Restaurant.cafe]: false,
+    [Restaurant.mamasan]: false,
+    [Restaurant.vesuvio]: false,
+  });
+
+  const toggleRestaurant = useCallback((restaurant: string, checked: boolean) => {
+    restaurants[restaurant] = checked;
+    setRestaurants({ ...restaurants });
+  }, []);
+
   const validateForm = useCallback(() => {
     return name.length > 0;
   }, [name]);
@@ -25,7 +38,10 @@ export default function SignupPage({ nav }: Props) {
       e.preventDefault();
       setLoading(true);
       setError(false);
-      const success = await signup({ name });
+      const success = await signup({
+        name,
+        restaurants: Object.keys(restaurants).filter((k) => restaurants[k]),
+      });
 
       setLoading(false);
 
@@ -50,6 +66,22 @@ export default function SignupPage({ nav }: Props) {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+
+        <div>
+          <h3>Restaurants you like</h3>
+          {[Restaurant.blando, Restaurant.cafe, Restaurant.mamasan, Restaurant.vesuvio].map(
+            (resto) => (
+              <p key={resto}>
+                <Checkbox
+                  label={resto}
+                  value={resto}
+                  checked={restaurants[resto]}
+                  onChange={toggleRestaurant}
+                />
+              </p>
+            )
+          )}
+        </div>
 
         <Error className="margin-l-top" error={error}>
           Something happened :/
