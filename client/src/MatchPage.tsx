@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMatches as getMatch } from "./api";
+import { getMatch } from "./api";
 import Loading from "./Loading";
 import { Page } from "./page";
 import "./WaitPage.css";
@@ -37,18 +37,25 @@ export default function MatchPage(props: Props) {
 
   return (
     <div id="match-page" className="card">
-      {error ? (
+      {error && (
         <>
           <h2>Oops, something went wrong</h2>
           <p>Try reloading the page, or contact an admin!</p>
         </>
-      ) : (
+      )}
+
+      {matchName ? (
         <>
           <h2>You've been matched for today's lunch!</h2>
 
           <p className="margin-l-top">🎉️ We've found you a match 🎉️</p>
 
           <p>Please meet {matchName} at 12:00 by the reception</p>
+        </>
+      ) : (
+        <>
+          <h2>No match for you today</h2>
+          <p className="margin-l-top">We could not find a match for you.</p>
         </>
       )}
     </div>

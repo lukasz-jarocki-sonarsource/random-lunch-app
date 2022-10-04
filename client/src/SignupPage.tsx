@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function SignupPage({ nav }: Props) {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(localStorage.getItem("name") ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
