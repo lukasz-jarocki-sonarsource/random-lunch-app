@@ -38,10 +38,6 @@ function App() {
     <div className="App">
       <h1>Random Lunch Matchmaker</h1>
 
-      <button onClick={() => navigate(Page.signup)}>signup</button>
-      <button onClick={() => navigate(Page.wait)}>wait</button>
-      <button onClick={() => navigate(Page.match)}>match</button>
-
       {renderPage(page, navigate)}
     </div>
   );
