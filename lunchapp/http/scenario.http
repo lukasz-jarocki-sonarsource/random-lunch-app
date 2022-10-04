@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "name": "test-man1",
   "restaurants": [
-    "Il Vesuvio2"
+    "Il Vesuvio"
   ]
 }
 
