@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { differenceInMilliseconds, formatDistanceStrict, parse } from "date-fns";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cancel } from "./api";
 import Button from "./Button";
@@ -6,9 +7,12 @@ import Error from "./Error";
 import Loading from "./Loading";
 import "./WaitPage.css";
 
+const TIME = "11:30:00";
+
 export default function WaitPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [timer, setTimer] = useState("");
   const nav = useNavigate();
 
   const doCancel = useCallback(async () => {
@@ -25,12 +29,32 @@ export default function WaitPage() {
     }
   }, []);
 
+  useEffect(() => {
+    setInterval(() => {
+      const now = new Date();
+      setTimer(formatDistanceStrict(now, parse(TIME, "HH:mm:ss", now)));
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    const now = new Date();
+    const waitTime = differenceInMilliseconds(parse(TIME, "HH:mm:ss", now), now);
+
+    setTimeout(() => {
+      nav("/match");
+    }, Math.max(0, waitTime));
+  }, []);
+
   return (
     <div id="wait-page" className="card">
       <h2>You've signed up to today's lunch!</h2>
 
       <p className="margin-l-top">
         We'll find you a good match a few minutes before lunchtime and let you know at that moment!
+      </p>
+
+      <p className="margin-xl-top">
+        Be patient, you'll be notified in <em>{timer}</em>.
       </p>
 
       <Error className="margin-l-top" error={error}>
